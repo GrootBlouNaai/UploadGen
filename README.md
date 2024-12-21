@@ -1,67 +1,66 @@
 # UploadGen
 
-**UploadGen** adalah skrip Python yang serbaguna dirancang untuk menyederhanakan proses unggah file ke platform berbagi file populer melalui antarmuka baris perintah yang intuitif. [EN](README-en.md)
+**UploadGen** is a versatile Python script designed to simplify file uploads to popular file-sharing platforms through an intuitive command-line interface.
 
-## Fitur
+## Features
 
-- **Unggah ke Pixeldrain.com**
-- **Unggah ke GoFile.io**
-- **Unggah ke Bashupload.com**
-- **Unggah ke Devuploads.com**
-- **Unggah ke File.io**
-- **Unggah ke Uguu.se**
-- **Unggah ke 0x0.st**
+- **Upload to Pixeldrain.com**
+- **Upload to GoFile.io**
+- **Upload to Bashupload.com**
+- **Upload to Devuploads.com**
+- **Upload to File.io**
+- **Upload to Uguu.se**
+- **Upload to 0x0.st**
 
-## Persyaratan
+## Requirements
 
 - Python 3.x
-- Library `requests` (dapat diinstal melalui `pip`)
+- `requests` library (installable via `pip`)
 
-## Instalasi
+## Installation
 
-Untuk memulai dengan UploadGen, ikuti langkah-langkah berikut:
+To get started with UploadGen, follow these steps:
 
    ```bash
    git clone https://github.com/officialputuid/UploadGen.git
    cd UploadGen
    ```
 
-Atau, Anda dapat mengunduh skrip secara langsung:
+Alternatively, you can download the script directly:
 
    ```bash
    wget https://raw.githubusercontent.com/officialputuid/UploadGen/main/uploadgen.py
    ```
 
-## Penggunaan
+## Usage
 
 1. **Interactive Mode**
 
-Untuk menjalankan skrip dan menggunakan menu interaktif:
+   To start the script and use the interactive menu:
 
    ```bash
-   python3 uploadgen.py
+   python uploadgen.py
    ```
 
 2. **Command-Line Arguments**
 
-Untuk mengunggah file langsung menggunakan argumen baris perintah:
+   To upload a file directly via command-line arguments:
 
    ```bash
-   python3 uploadgen.py -s [1/2/3/4/5/6/7] -f [file]
+   python uploadgen.py -s [1/2/3/4/5/6/7] -f [file]
    ```
-   contoh: `python uploadgen.py -s 2 -f /path/file.txt`
+   ex: `python uploadgen.py -s 2 -f /path/file.txt`
 
-- `-h`: Panduan UploadGen
-- `-s [1/2/3/4/5/6/7]`: Memilih layanan:
-  - `1` untuk Pixeldrain.com
-  - `2` untuk GoFile.io
-  - `3` untuk Bashupload.com
-  - `4` untuk Devuploads.com
-  - `5` untuk File.io
-  - `6` untuk Uguu.se
-  - `7` untuk 0x0.st
-- `-f [file]`: Menentukan jalur ke file yang ingin Anda unggah.
+- `-h`: UploadGen Guide
+- `-s [1/2/3/4/5/6/7]`: Select service:
+  - `1` for Pixeldrain.com
+  - `2` for GoFile.io
+  - `3` for Bashupload.com
+  - `4` for Devuploads.com
+  - `5` for File.io
+  - `7` for 0x0.st
+- `-f [file]`: Specifies the path to the file you want to upload.
 
-## Lisensi
+## License
 
-Proyek ini dilisensikan di bawah Lisensi MIT. Lihat file [LICENSE](LICENSE) untuk detail lebih lanjut.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
