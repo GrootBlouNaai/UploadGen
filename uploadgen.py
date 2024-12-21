@@ -7,14 +7,14 @@ import requests
 import base64
 
 def upload_pixeldrain(api_key, file_path):
-    print(f"[⌛] Mengunggah {file_path} ke Pixeldrain.com . . .")
+    print(f"[⌛] Uploading {file_path} to Pixeldrain.com . . .")
 
-    # Validasi kunci API menggunakan metode yang diadaptasi
+    # Validate API key using adapted method
     try:
-        # Encode kunci API ke Base64
+        # Encode API key to Base64
         encoded_api_key = base64.b64encode(f":{api_key}".encode()).decode()
 
-        # Gunakan header Authorization dengan kunci yang ter-encode
+        # Use Authorization header with encoded key
         check_api_response = requests.get(
             "https://pixeldrain.com/api/user/files",
             headers={
@@ -22,15 +22,15 @@ def upload_pixeldrain(api_key, file_path):
             }
         )
         if check_api_response.status_code == 200:
-            print("[✔️] Kunci API Pixeldrain valid!")
+            print("[✔️] Pixeldrain API key is valid!")
         else:
-            print(f"[❌] Kunci API Pixeldrain tidak valid! Kode status: {check_api_response.status_code}")
+            print(f"[❌] Pixeldrain API key is invalid! Status code: {check_api_response.status_code}")
             return
     except requests.exceptions.RequestException as e:
-        print(f"[❌] Gagal memeriksa kunci API: {e}\n")
+        print(f"[❌] Failed to check API key: {e}\n")
         return
 
-    # Lanjutkan dengan mengunggah file
+    # Continue with file upload
     try:
         with open(file_path, 'rb') as f:
             response = requests.post(
@@ -42,28 +42,28 @@ def upload_pixeldrain(api_key, file_path):
         response_json = response.json()
         file_id = response_json.get('id')
         if file_id:
-            print("[✔️] Berkas berhasil diunggah!")
-            print(f"[🔗] URL berkas Anda: https://pixeldrain.com/u/{file_id}\n")
+            print("[✔️] File uploaded successfully!")
+            print(f"[🔗] Your file URL: https://pixeldrain.com/u/{file_id}\n")
         else:
-            print("[❌] Gagal mengunggah.")
+            print("[❌] Upload failed.")
     except requests.exceptions.SSLError as ssl_err:
-        print(f"[❌] Gagal mengunggah berkas: Masalah SSL. Pesan kesalahan: {ssl_err}\n")
+        print(f"[❌] Failed to upload file: SSL issue. Error message: {ssl_err}\n")
     except requests.exceptions.RequestException as e:
-        print(f"[❌] Gagal mengunggah berkas: {e}\n")
+        print(f"[❌] Failed to upload file: {e}\n")
     except requests.exceptions.JSONDecodeError:
-        print("[❌] Tidak dapat menguraikan respons sebagai JSON.\n")
+        print("[❌] Unable to decode response as JSON.\n")
     except Exception as e:
-        print(f"[❌] Terjadi kesalahan yang tidak diketahui: {e}\n")
+        print(f"[❌] An unknown error occurred: {e}\n")
         sys.exit(1)
 
 def upload_gofile(file_path):
-    print(f"[⌛] Mengunggah {file_path} ke Gofile.io . . .")
+    print(f"[⌛] Uploading {file_path} to Gofile.io . . .")
     try:
         server_response = requests.get("https://api.gofile.io/servers")
         server_response.raise_for_status()
         server = server_response.json()['data']['servers'][0]['name']
     except requests.RequestException as e:
-        print(f"[❌] Gagal mendapatkan informasi server: {e}\n")
+        print(f"[❌] Failed to retrieve server information: {e}\n")
         sys.exit(1)
 
     try:
@@ -74,14 +74,14 @@ def upload_gofile(file_path):
             )
             upload_response.raise_for_status()
         link = upload_response.json()['data']['downloadPage']
-        print("[✔️] Berkas berhasil diunggah!")
-        print(f"[🔗] URL berkas Anda: {link}\n")
+        print("[✔️] File uploaded successfully!")
+        print(f"[🔗] Your file URL: {link}\n")
     except requests.RequestException as e:
-        print(f"[❌] Gagal mengunggah berkas: {e}\n")
+        print(f"[❌] Failed to upload file: {e}\n")
         sys.exit(1)
 
 def upload_bashupload(file_path):
-    print(f"[⌛] Mengunggah {file_path} ke Bashupload.com . . .")
+    print(f"[⌛] Uploading {file_path} to Bashupload.com . . .")
     try:
         with open(file_path, 'rb') as f:
             response = requests.post(
@@ -89,7 +89,7 @@ def upload_bashupload(file_path):
                 files={'file': f}
             )
         response.raise_for_status()
-        # Ekstrak URL dari respons
+        # Extract URL from response
         response_text = response.text
         url_start = response_text.find("https://bashupload.com/")
         if url_start != -1:
@@ -97,20 +97,20 @@ def upload_bashupload(file_path):
             if url_end == -1:
                 url_end = len(response_text)
             link = response_text[url_start:url_end].strip()
-            print("[✔️] Berkas berhasil diunggah!")
-            print(f"[🔗] URL berkas Anda: {link}\n")
+            print("[✔️] File uploaded successfully!")
+            print(f"[🔗] Your file URL: {link}\n")
         else:
-            print("[❌] Gagal mengunggah berkas. URL tidak ditemukan.\n")
+            print("[❌] Failed to upload file. URL not found.\n")
     except requests.RequestException as e:
-        print(f"[❌] Gagal mengunggah berkas: {e}\n")
+        print(f"[❌] Failed to upload file: {e}\n")
         sys.exit(1)
 
 def upload_devuploads(api_key, file_path):
-    print(f"[⌛] Mengunggah {file_path} ke Devuploads.com . . .")
+    print(f"[⌛] Uploading {file_path} to Devuploads.com . . .")
     url = "https://devuploads.com/api/upload/server"
 
     try:
-        # Validasi kunci API
+        # Validate API key
         check_response = requests.get(f"{url}?key={api_key}")
         check_response.raise_for_status()
         res_json = check_response.json()
@@ -120,21 +120,21 @@ def upload_devuploads(api_key, file_path):
         server_url = res_json.get("result")
 
         if res_status == 200:
-            print("[✔️] Kunci API Devuploads valid!")
+            print("[✔️] Devuploads API key is valid!")
             if not sess_id or not server_url:
-                print(f"[❌] Informasi server tidak tersedia. Kunci API valid tetapi informasi server kosong.")
+                print(f"[❌] Server information not available. API key valid but server information empty.")
                 return
         else:
-            print(f"[❌] Kunci API Devuploads tidak valid! Kode status: {res_status}")
+            print(f"[❌] Devuploads API key is invalid! Status code: {res_status}")
             return
 
-        # Periksa ukuran file
+        # Check file size
         file_size = os.path.getsize(file_path)
         if file_size == 0:
-            print(f"[❌] File {file_path} tidak memiliki isi apapun.\n[❌] Devuploads tidak dapat mengunggah berkas dengan ukuran 0 byte")
+            print(f"[❌] File {file_path} is empty.\n[❌] Devuploads cannot upload files with 0 bytes")
             return
 
-        # Lanjutkan dengan mengunggah file
+        # Continue with file upload
         with open(file_path, 'rb') as f:
             upload_response = requests.post(
                 server_url,
@@ -152,15 +152,15 @@ def upload_devuploads(api_key, file_path):
         file_status = upload_response_json.get("file_status")
 
         if file_code == 'undef':
-            print(f"[❌] Gagal mengunggah: {file_status}\n")
+            print(f"[❌] Upload failed: {file_status}\n")
         elif file_code:
-            print("[✔️] Berkas berhasil diunggah!")
-            print(f"[🔗] URL berkas Anda: https://devuploads.com/{file_code}\n")
+            print("[✔️] File uploaded successfully!")
+            print(f"[🔗] Your file URL: https://devuploads.com/{file_code}\n")
         else:
-            print(f"[❌] Gagal mengunggah: {upload_response_json}\n")
+            print(f"[❌] Upload failed: {upload_response_json}\n")
 
     except requests.RequestException as e:
-        print(f"[❌] Gagal mengunggah berkas: {e}\n")
+        print(f"[❌] Failed to upload file: {e}\n")
         sys.exit(1)
 
 def upload_fileio(file_path):
@@ -173,7 +173,7 @@ def upload_fileio(file_path):
             )
             upload_response.raise_for_status()
         link = upload_response.json()['link']
-        print("[✔️] File successfully uploaded!")
+        print("[✔️] File uploaded successfully!")
         print(f"[🔗] Your file URL: {link}\n")
     except requests.RequestException as e:
         print(f"[❌] Failed to upload file: {e}\n")
@@ -193,7 +193,7 @@ def upload_uguu(file_path):
         response_json = upload_response.json()
         if response_json.get('success'):
             file_url = response_json['files'][0]['url']
-            print("[✔️] File successfully uploaded!")
+            print("[✔️] File uploaded successfully!")
             print(f"[🔗] Your file URL: {file_url}\n")
         else:
             print(f"[❌] Failed to upload file: {response_json}\n")
@@ -203,7 +203,7 @@ def upload_uguu(file_path):
         sys.exit(1)
 
 def upload_0x0st(file_path):
-    print(f"[⌛] Mengunggah {file_path} ke 0x0.st . . .")
+    print(f"[⌛] Uploading {file_path} to 0x0.st . . .")
     
     try:
         with open(file_path, 'rb') as f:
@@ -215,11 +215,11 @@ def upload_0x0st(file_path):
         
         # Response from 0x0.st is in plain text
         link = response.text.strip()
-        print("[✔️] Berkas berhasil diunggah!")
-        print(f"[🔗] URL berkas Anda: {link}\n")
+        print("[✔️] File uploaded successfully!")
+        print(f"[🔗] Your file URL: {link}\n")
     
     except requests.RequestException as e:
-        print(f"[❌] Gagal mengunggah berkas: {e}\n")
+        print(f"[❌] Failed to upload file: {e}\n")
         sys.exit(1)
 
 # ASCII art
@@ -307,118 +307,118 @@ def interactive_mode():
  \___/| .__/|_|\___/ \__,_|\__,_|\____|\___|_| |_|
       |_|                                         
 
-Versi: v1.7
-oleh officialputuid   
+Version: v1.7
+by officialputuid   
     """ + "\033[0m")
 
     while True:
-        print("Pilih layanan untuk mengunggah:")
-        print("1. Pixeldrain.com (Memerlukan API)")
+        print("Choose the service to upload to:")
+        print("1. Pixeldrain.com (Requires API)")
         print("2. GoFile.io")
-        print("3. Bashupload.com (Sementara)")
-        print("4. Devuploads.com (Memerlukan API)")
+        print("3. Bashupload.com (Temporary)")
+        print("4. Devuploads.com (Requires API)")
         print("5. File.io")
         print("6. Uguu.se")
         print("7. 0x0.st")
 
         try:
-            choice = input("\n[❓] Masukkan nomor pilihan Anda: ")
+            choice = input("\n[❓] Enter your choice number: ")
 
-            # ASCII
+            # ASCII art
             print_ascii_art(int(choice))
 
             if choice == '1':
                 while True:
-                    print("\n[🛈] Anda memilih:\n[1] Pixeldrain.com (Memerlukan API)\n")
-                    api_key = input("[🔑] Masukkan kunci API Pixeldrain Anda: ").strip()
+                    print("\n[🛈] You chose:\n[1] Pixeldrain.com (Requires API)\n")
+                    api_key = input("[🔑] Enter your Pixeldrain API key: ").strip()
                     if api_key:
                         break
-                    print("[❌] Kunci API tidak boleh kosong. Silakan masukkan kunci API yang benar.")
+                    print("[❌] API key cannot be empty. Please enter a valid API key.")
                 upload_pixeldrain(api_key, get_file_path())
             elif choice == '2':
-                print("[🛈] Anda memilih:\n[2] GoFile.io\n")
+                print("[🛈] You chose:\n[2] GoFile.io\n")
                 upload_gofile(get_file_path())
             elif choice == '3':
-                print("[🛈] Anda memilih:\n[3] Bashupload.com\n[🛈] File disimpan selama 3 hari dan hanya bisa diunduh sekali.\n")
+                print("[🛈] You chose:\n[3] Bashupload.com\n[🛈] File stored for 3 days and can only be downloaded once.\n")
                 upload_bashupload(get_file_path())
             elif choice == '4':
                 while True:
-                    print("\n[🛈] Anda memilih:\n[4] Devuploads.com (Memerlukan API)\n[🛈] Devuploads tidak dapat mengunggah berkas dengan ukuran 0 byte\n")
-                    api_key = input("[🔑] Masukkan kunci API Devuploads Anda: ").strip()
+                    print("\n[🛈] You chose:\n[4] Devuploads.com (Requires API)\n[🛈] Devuploads cannot upload files with 0 bytes\n")
+                    api_key = input("[🔑] Enter your Devuploads API key: ").strip()
                     if api_key:
                         break
-                    print("[❌] Kunci API tidak boleh kosong. Silakan masukkan kunci API yang benar.")
+                    print("[❌] API key cannot be empty. Please enter a valid API key.")
                 upload_devuploads(api_key, get_file_path())
             elif choice == '5':
-                print("[🛈] Anda memilih:\n[5] File.io\n")
+                print("[🛈] You chose:\n[5] File.io\n")
                 upload_fileio(get_file_path())
             elif choice == '6':
-                print("[🛈] Anda memilih:\n[6] Uguu.se\n")
+                print("[🛈] You chose:\n[6] Uguu.se\n")
                 upload_uguu(get_file_path())
             elif choice == '7':
-                print("[🛈] Anda memilih:\n[7] 0x0.st\n")
+                print("[🛈] You chose:\n[7] 0x0.st\n")
                 upload_0x0st(get_file_path())
             else:
-                print("[❌] Pilihan tidak valid.")
+                print("[❌] Invalid choice.")
                 sys.exit(1)
 
-            # Tanyakan pengguna apakah ingin mengunggah file lain
-            repeat = input("[🔄] Ingin mengunggah file lain? (y/n): ").strip().lower()
+            # Ask user if they want to upload another file
+            repeat = input("[🔄] Do you want to upload another file? (y/n): ").strip().lower()
             if repeat == 'n':
-                print("[✔️] Terimakasih telah menggunakan UploadGen!\n")
+                print("[✔️] Thank you for using UploadGen!\n")
                 break
 
         except KeyboardInterrupt:
-            print("\n[✔️] Program telah ditutup!\n")
+            print("\n[✔️] Program closed!\n")
             sys.exit(0)
 
 def get_file_path():
     while True:
-        file_path = input("[📁] Ketik berkas yang akan diunggah: ").strip()
+        file_path = input("[📁] Type the file to upload: ").strip()
         if file_path and os.path.isfile(os.path.abspath(file_path)):
             return os.path.abspath(file_path)
-        print("[❌] Berkas tidak ditemukan! Harap masukkan berkas yang valid.")
+        print("[❌] File not found! Please enter a valid file.")
 
 def main():
-    parser = argparse.ArgumentParser(description="Unggah berkas ke berbagai layanan berbagi berkas.")
+    parser = argparse.ArgumentParser(description="Upload file to various file sharing services.")
     parser.add_argument("-s", "--service", type=int, choices=[1, 2, 3, 4, 5, 6, 7],
-                        help="Pilih layanan: 1=Pixeldrain, 2=GoFile, 3=Bashupload, 4=Devuploads, 5=File, 6=Uguu, 7=0x0st")
-    parser.add_argument("-f", "--file", help="Path berkas yang akan diunggah")
+                        help="Choose service: 1=Pixeldrain, 2=GoFile, 3=Bashupload, 4=Devuploads, 5=File, 6=Uguu, 7=0x0st")
+    parser.add_argument("-f", "--file", help="Path of the file to upload")
 
     args = parser.parse_args()
 
     if args.service and args.file:
         if not os.path.isfile(os.path.abspath(args.file)):
-            print("\n[❌] Berkas tidak ditemukan!\n")
+            print("\n[❌] File not found!\n")
             sys.exit(1)
 
         file_path = os.path.abspath(args.file)
 
-        # ASCII
+        # ASCII art
         print_ascii_art(args.service)
 
         if args.service == 1:
-            print("\n[🛈] Anda memilih: [1] Pixeldrain.com (Memerlukan API)\n")
-            api_key = input("[🔑] Masukkan kunci API Pixeldrain Anda: ").strip()
+            print("\n[🛈] You chose: [1] Pixeldrain.com (Requires API)\n")
+            api_key = input("[🔑] Enter your Pixeldrain API key: ").strip()
             upload_pixeldrain(api_key, file_path)
         elif args.service == 2:
-            print("\n[🛈] Anda memilih: [2] GoFile.io\n")
+            print("\n[🛈] You chose: [2] GoFile.io\n")
             upload_gofile(file_path)
         elif args.service == 3:
-            print("\n[🛈] Anda memilih: [3] Bashupload.com\n[🛈] File disimpan selama 3 hari dan hanya bisa diunduh sekali.\n")
+            print("\n[🛈] You chose: [3] Bashupload.com\n[🛈] File stored for 3 days and can only be downloaded once.\n")
             upload_bashupload(file_path)
         elif args.service == 4:
-            print("\n[🛈] Anda memilih: [4] Devuploads.com (Memerlukan API)\n[🛈] Devuploads tidak dapat mengunggah berkas dengan ukuran 0 byte\n")
-            api_key = input("[🔑] Masukkan kunci API Devuploads Anda: ").strip()
+            print("\n[🛈] You chose: [4] Devuploads.com (Requires API)\n[🛈] Devuploads cannot upload files with 0 bytes\n")
+            api_key = input("[🔑] Enter your Devuploads API key: ").strip()
             upload_devuploads(api_key, file_path)
         elif args.service == 5:
-            print("\n[🛈] Anda memilih: [5] File.io\n")
+            print("\n[🛈] You chose: [5] File.io\n")
             upload_fileio(file_path)
         elif args.service == 6:
-            print("\n[🛈] Anda memilih: [6] Uguu.se\n")
+            print("\n[🛈] You chose: [6] Uguu.se\n")
             upload_uguu(file_path)
         elif args.service == 7:
-            print("\n[🛈] Anda memilih: [7] 0x0.st\n")
+            print("\n[🛈] You chose: [7] 0x0.st\n")
             upload_0x0st(file_path)
     else:
         interactive_mode()
@@ -427,5 +427,5 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("\n[✔️] Program sudah ditutup!\n")
+        print("\n[✔️] Program closed!\n")
         sys.exit(0)
